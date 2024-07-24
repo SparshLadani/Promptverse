@@ -1,7 +1,6 @@
 import Prompt from "@models/prompt";
 import { connectToDB } from "@utils/database";
 
-// Correctly define and export the GET function
 export const GET = async (request) => {
     try {
         await connectToDB();
@@ -12,6 +11,7 @@ export const GET = async (request) => {
 
         return new Response(JSON.stringify(prompts), { status: 200 });
     } catch (error) {
-        console.log(error);
+        console.error('Error fetching prompts:', error);
+        return new Response(JSON.stringify({ error: 'Failed to fetch prompts' }), { status: 500 });
     }
 };
