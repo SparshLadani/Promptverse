@@ -70,4 +70,4 @@ const UpdatePrompt = () => {
   );
 };
 
-export default UpdatePrompt;
+export default UpdatePromptComponent;
