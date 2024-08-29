@@ -1,8 +1,8 @@
-FROM node:20 as builder
+FROM node:20-alpine3.18 as builder
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm install --production
+RUN npm install --omit=optional  # Install all dependencies except optional ones
 COPY . .
 RUN npm run build
 EXPOSE 3000
