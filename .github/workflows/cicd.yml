@@ -29,4 +29,4 @@ jobs:
       - name: Delete old container if exists
         run: docker rm -f nextjs-project-container
       - name: Run docker container
-        run: docker run -d -p 3000:3000 --name nextjs-project-container sparshladani/nextjs-project
+        run: docker run -d -p 80:3000 --name nextjs-project-container sparshladani/nextjs-project
