@@ -1,0 +1,32 @@
+name: Deploy Next.js Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+      - name: Create .env file
+        run: echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env && echo "SITE_URL=${{ secrets.SITE_URL }} >> .env && echo "GOOGLE_ID=${{ secrets.GOOGLE_ID }} >> .env && echo "GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET }} >> .env && echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env && echo "NEXTAUTH_URL_INTERNAL=${{ secrets.NEXTAUTH_URL_INTERNAL }}"
+      - name: Build Docker Image
+        run: docker build -t sparshladani/nextjs-project .
+      - name: Login to docker hub account
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Publish Image to docker hub
+        run: docker push sparshladani/nextjs-project:latest
+  
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull sparshladani/nextjs-project:latest
+      - name: Delete old container if exists
+        run: docker rm -f nextjs-project-container
+      - name: Run docker container
+        run: docker run -d -p 3000:3000 --name nextjs-project-container sparshladani/nextjs-project
