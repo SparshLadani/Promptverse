@@ -11,7 +11,6 @@ const options = {
       clientSecret: process.env.GOOGLE_SECRET
     }),
   ],
-  trustHost: true,
   callbacks: {
     async session({ session }) {
       const sessionUser = await user.findOne({ email: session.user.email });
